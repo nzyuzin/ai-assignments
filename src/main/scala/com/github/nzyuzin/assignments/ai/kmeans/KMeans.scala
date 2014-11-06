@@ -7,15 +7,6 @@ import scala.io.Source
 
 object KMeans {
 
-  def main(args: Array[String]) = {
-    val file = "parameters.txt"
-    val input = Source.fromFile(file)
-    val inputScanner = new Scanner(input.bufferedReader())
-    val amountOfClusters = readAmountOfClusters(inputScanner)
-    val parameters = readParameters(inputScanner)
-    cluster(parameters, amountOfClusters)
-  }
-
   def readAmountOfClusters(input: Scanner): Int = {
     input.nextInt()
   }
@@ -41,8 +32,49 @@ object KMeans {
     result
   }
 
-  def cluster(parameters: Seq[Parameter], amountOfClusters: Int): Unit = {
+  def main(args: Array[String]) = {
+    val file = "parameters.txt"
+    val input = Source.fromFile(file)
+    val inputScanner = new Scanner(input.bufferedReader())
+    val amountOfClusters = readAmountOfClusters(inputScanner)
+    val parameters = readParameters(inputScanner)
+    val result = cluster(parameters, amountOfClusters)
+    println(result, computeError(result))
+  }
 
+  def cluster(parameters: Seq[Parameter], amountOfClusters: Int): Map[Parameter, Seq[Parameter]] = {
+    val clusterToParameters = new mutable.HashMap[Parameter, mutable.MutableList[Parameter]]()
+
+    var i = 0
+    val parIter = parameters.iterator
+    while (i < amountOfClusters) { // Initial setting for clusters
+      val par = parIter.next()
+      clusterToParameters.put(par, new mutable.MutableList[Parameter])
+      i += 1
+    }
+
+    parameters.foreach(p => {
+      val clustIter = clusterToParameters.keysIterator
+      val differences = new mutable.HashMap[Double, Parameter]
+      1.to(amountOfClusters).foreach({ i =>
+        val clust = clustIter.next()
+        differences.put(clust.differenceFrom(p), clust)
+      })
+      val minDist = differences.keySet.min(Ordering.Double)
+      clusterToParameters.get(differences.get(minDist).get).get += p
+    })
+
+    clusterToParameters.toMap
+  }
+
+  def computeError(parametersToClusters: Map[Parameter, Seq[Parameter]]): Double = {
+    var error = 0.0
+    parametersToClusters.foreach((parToClust: (Parameter, Seq[Parameter])) =>
+      error += parToClust._2.foldLeft(0.0) { (z, p: Parameter) =>
+        z + p.differenceFrom(parToClust._1)
+      }
+    )
+    error
   }
 
 }
