@@ -15,8 +15,10 @@ object KMeans {
     val result = new mutable.MutableList[Parameter]
     val lowerBoundFirst = input.nextInt()
     val upperBoundFirst = input.nextInt()
+    val firstLen = upperBoundFirst - lowerBoundFirst
     val lowerBoundSecond = input.nextInt()
     val upperBoundSecond = input.nextInt()
+    val secondLen = upperBoundSecond - lowerBoundSecond
     while (input.hasNext) {
       val first = input.nextDouble()
       if (first < lowerBoundFirst || first > upperBoundFirst) {
@@ -27,7 +29,7 @@ object KMeans {
         throw new RuntimeException("second parameter is out of bounds: " + second)
       }
       val third = input.nextBoolean()
-      result += new Parameter(first, second, third)
+      result += new Parameter(first, firstLen, second, secondLen, third)
     }
     result
   }
@@ -79,10 +81,12 @@ object KMeans {
 
 }
 
-class Parameter(f: Double, s: Double, t: Boolean) {
+class Parameter(f: Double, fL: Int, s: Double, sL: Int, t: Boolean) {
 
   def first() = f
+  def firstLength() = fL
   def second() = s
+  def secondLength() = sL
   def third() = t
 
   override def toString: String = {
@@ -91,8 +95,8 @@ class Parameter(f: Double, s: Double, t: Boolean) {
 
   def differenceFrom(another: Parameter): Double = {
     val square = (x: Double) => x * x
-    math.sqrt(square(this.first - another.first)
-      + square(this.second - another.second)
+    math.sqrt(square((this.first - another.first) / firstLength)
+      + square((this.second - another.second) / secondLength)
       + (if (this.third == another.third) 1  else 0))
   }
 
