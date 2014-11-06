@@ -22,9 +22,19 @@ object KMeans {
 
   def readParameters(input: Scanner): Seq[Parameter] = {
     val result = new mutable.MutableList[Parameter]
+    val lowerBoundFirst = input.nextInt()
+    val upperBoundFirst = input.nextInt()
+    val lowerBoundSecond = input.nextInt()
+    val upperBoundSecond = input.nextInt()
     while (input.hasNext) {
       val first = input.nextDouble()
+      if (first < lowerBoundFirst || first > upperBoundFirst) {
+        throw new RuntimeException("first parameter is out of bounds: " + first)
+      }
       val second = input.nextDouble()
+      if (second < lowerBoundSecond || second > upperBoundSecond) {
+        throw new RuntimeException("second parameter is out of bounds: " + second)
+      }
       val third = input.nextBoolean()
       result += new Parameter(first, second, third)
     }
