@@ -40,33 +40,48 @@ object KMeans {
     val inputScanner = new Scanner(input.bufferedReader())
     val amountOfClusters = readAmountOfClusters(inputScanner)
     val parameters = readParameters(inputScanner)
-    val result = cluster(parameters, amountOfClusters)
-    println(result, computeError(result))
+    val clusters = initClusters(parameters, amountOfClusters)
+    val clustersToParameters = cluster(parameters, clusters)
+    println(clustersToParameters, computeError(clustersToParameters))
   }
 
-  def cluster(parameters: Seq[Parameter], amountOfClusters: Int): Map[Parameter, Seq[Parameter]] = {
-    val clusterToParameters = new mutable.HashMap[Parameter, mutable.MutableList[Parameter]]()
-
+  def initClusters(parameters: Seq[Parameter], amountOfClusters: Int): Map[Parameter, Seq[Parameter]] = {
+    val clusterToParameters = new mutable.HashMap[Parameter, Seq[Parameter]]()
     var i = 0
     val parIter = parameters.iterator
-    while (i < amountOfClusters) { // Initial setting for clusters
-      val par = parIter.next()
+    while (i < amountOfClusters) {
+    val par = parIter.next()
       clusterToParameters.put(par, new mutable.MutableList[Parameter])
       i += 1
     }
+    clusterToParameters.toMap
+  }
+
+  def cluster(
+               parameters: Seq[Parameter],
+               clusterToParameters: Map[Parameter, Seq[Parameter]]
+             ): Map[Parameter, Seq[Parameter]] = {
+    val result = new mutable.HashMap[Parameter, mutable.MutableList[Parameter]]
+    clusterToParameters.foreach((cToP: (Parameter, Seq[Parameter])) => result.put(cToP._1, new mutable.MutableList))
 
     parameters.foreach(p => {
-      val clustIter = clusterToParameters.keysIterator
       val differences = new mutable.HashMap[Double, Parameter]
-      1.to(amountOfClusters).foreach({ i =>
-        val clust = clustIter.next()
-        differences.put(clust.differenceFrom(p), clust)
+
+      clusterToParameters.keys.foreach({ cluster =>
+        differences.put(p.differenceFrom(cluster), cluster)
       })
+
       val minDist = differences.keySet.min(Ordering.Double)
-      clusterToParameters.get(differences.get(minDist).get).get += p
+      val closestCluster = differences.get(minDist).get
+      result.get(closestCluster).get += p
     })
 
-    clusterToParameters.toMap
+    result.toMap
+  }
+
+  def improveClustering(clusterToParameter: Map[Parameter, Seq[Parameter]]): Map[Parameter, Seq[Parameter]] = {
+    val result = new mutable.HashMap[Parameter, mutable.MutableList[Parameter]]
+    result.toMap
   }
 
   def computeError(parametersToClusters: Map[Parameter, Seq[Parameter]]): Double = {
