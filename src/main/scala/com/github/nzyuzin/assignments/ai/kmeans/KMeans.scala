@@ -58,7 +58,7 @@ object KMeans {
 
     println(clustersToParameters, computeError(clustersToParameters))
     clustersToParameters.foreach((pair: (Parameter, Seq[Parameter])) =>
-      println("elements in cluster " + pair._1 + " = " + pair._2.size))
+    println("elements in cluster " + pair._1 + " = " + pair._2.size))
 
   }
 
