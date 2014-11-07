@@ -64,7 +64,7 @@ object KMeans {
     var i = 0
     val parIter = parameters.iterator
     while (i < amountOfClusters) {
-    val par = parIter.next()
+      val par = parIter.next()
       clusterToParameters.put(par, new mutable.MutableList[Parameter])
       i += 1
     }
