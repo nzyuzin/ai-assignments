@@ -41,7 +41,21 @@ object KMeans {
     val amountOfClusters = readAmountOfClusters(inputScanner)
     val parameters = readParameters(inputScanner)
     val clusters = initClusters(parameters, amountOfClusters)
-    val clustersToParameters = cluster(parameters, clusters)
+    var clustersToParameters = cluster(parameters, clusters)
+
+    println("initial clustering: ", clustersToParameters, computeError(clustersToParameters))
+
+    var break = false
+    while (!break) {
+      val error = computeError(clustersToParameters)
+      val newCentroids = chooseCentroids(clustersToParameters)
+      clustersToParameters = cluster(parameters, newCentroids)
+      val newError = computeError(clustersToParameters)
+      if (newError - error < 1) {
+        break = true
+      }
+    }
+
     println(clustersToParameters, computeError(clustersToParameters))
   }
 
@@ -79,16 +93,38 @@ object KMeans {
     result.toMap
   }
 
-  def improveClustering(clusterToParameter: Map[Parameter, Seq[Parameter]]): Map[Parameter, Seq[Parameter]] = {
+  def chooseCentroids(clusterToParameter: Map[Parameter, Seq[Parameter]]): Map[Parameter, Seq[Parameter]] = {
     val result = new mutable.HashMap[Parameter, mutable.MutableList[Parameter]]
+    val chooseCentroid = { parameters: Seq[Parameter] =>
+      var newFirst = 0.0
+      var newSecond = 0.0
+      var newThird = 0.0
+
+      var firstLen = 0
+      var secondLen = 0
+
+      parameters.foreach({ p =>
+        newFirst += p.first() / parameters.length
+        newSecond += p.second() / parameters.length
+        newThird += { if (p.third()) 1 / parameters.length else 0 }
+        firstLen = p.firstLength()
+        secondLen = p.secondLength()
+      })
+
+      new Parameter(newFirst, firstLen, newSecond, secondLen, newThird > 0.5)
+    }
+    clusterToParameter.foreach({ (clusterToParameters: (Parameter, Seq[Parameter])) =>
+       result.put(chooseCentroid(clusterToParameters._2), new mutable.MutableList[Parameter])
+    })
+
     result.toMap
   }
 
   def computeError(parametersToClusters: Map[Parameter, Seq[Parameter]]): Double = {
     var error = 0.0
-    parametersToClusters.foreach((parToClust: (Parameter, Seq[Parameter])) =>
-      error += parToClust._2.foldLeft(0.0) { (z, p: Parameter) =>
-        z + p.differenceFrom(parToClust._1)
+    parametersToClusters.foreach((clusterToParameters: (Parameter, Seq[Parameter])) =>
+      error += clusterToParameters._2.foldLeft(0.0) { (z, p: Parameter) =>
+        z + p.differenceFrom(clusterToParameters._1)
       }
     )
     error
