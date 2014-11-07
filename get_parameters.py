@@ -5,9 +5,9 @@ import sys
 
 def printRandomParameters(n):
   for _ in range(n):
-    first = random.randrange(-10, 1)
+    first = random.randrange(-10, 2)
     second = round(random.uniform(1, 2), 2)
-    thirdNumber = random.randrange(0,1)
+    thirdNumber = random.randrange(0,2)
     third = True if thirdNumber == 1 else False
 
     print(str(first) + ' ' + str(second) + ' ' + str(third).lower())
