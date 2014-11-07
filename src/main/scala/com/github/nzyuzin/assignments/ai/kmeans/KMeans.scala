@@ -144,7 +144,7 @@ class Parameter(f: Double, fL: Int, s: Double, sL: Int, t: Boolean) {
   def third() = t
 
   override def toString: String = {
-    first + " " + second + " " + third
+    "[%.2f %.2f %b]".format(first(), second(), third())
   }
 
   def differenceFrom(another: Parameter): Double = {
