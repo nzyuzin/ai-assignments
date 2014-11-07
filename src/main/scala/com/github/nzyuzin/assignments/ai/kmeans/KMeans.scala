@@ -45,20 +45,23 @@ object KMeans {
 
     println("initial clustering: ", clustersToParameters, computeError(clustersToParameters))
 
+    var iterations = 0
     var break = false
     while (!break) {
       val error = computeError(clustersToParameters)
       val newCentroids = chooseCentroids(clustersToParameters)
       clustersToParameters = cluster(parameters, newCentroids)
       val newError = computeError(clustersToParameters)
-      if (newError - error < 1) {
+      println(error, newError)
+      if (math.abs(newError - error) < (newError + error) / 2 * 0.01) {
         break = true
       }
+      iterations += 1
     }
 
-    println(clustersToParameters, computeError(clustersToParameters))
     clustersToParameters.foreach((pair: (Parameter, Seq[Parameter])) =>
     println("elements in cluster " + pair._1 + " = " + pair._2.size))
+    println("number of iterations = " + iterations)
 
   }
 
