@@ -57,6 +57,9 @@ object KMeans {
     }
 
     println(clustersToParameters, computeError(clustersToParameters))
+    clustersToParameters.foreach((pair: (Parameter, Seq[Parameter])) =>
+      println("elements in cluster " + pair._1 + " = " + pair._2.size))
+
   }
 
   def initClusters(parameters: Seq[Parameter], amountOfClusters: Int): Map[Parameter, Seq[Parameter]] = {
@@ -106,7 +109,7 @@ object KMeans {
       parameters.foreach({ p =>
         newFirst += p.first() / parameters.length
         newSecond += p.second() / parameters.length
-        newThird += { if (p.third()) 1 / parameters.length else 0 }
+        newThird += { if (p.third()) 1.0 / parameters.length else 0 }
         firstLen = p.firstLength()
         secondLen = p.secondLength()
       })
