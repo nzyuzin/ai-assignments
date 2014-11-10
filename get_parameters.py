@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+# Generates data for KMeans clustering
+
 import random
 import sys
 
