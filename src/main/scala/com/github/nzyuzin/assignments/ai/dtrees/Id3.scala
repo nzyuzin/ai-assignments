@@ -19,6 +19,18 @@ object Id3 {
     records.foreach(r => println(r))
   }
 
+  def entropy(records: Seq[Record]): Double = {
+    val membersInClass = new mutable.HashMap[Creditability, Int]()
+    records.foreach(record =>
+      membersInClass.put(record.creditability(), membersInClass.getOrElse(record.creditability(), 0) + 1))
+    var result = 0.0
+    membersInClass.values.foreach({ amount =>
+      val ratio: Double = amount.toDouble / records.length.toDouble
+      result += ratio * math.log(ratio) / math.log(2)
+    })
+    -result
+  }
+
   def readClassifiedRecords(input: Scanner): Seq[Record] = {
     val result = new mutable.MutableList[Record]
     while (input.hasNext) {
