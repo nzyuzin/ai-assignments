@@ -2,6 +2,7 @@ package com.github.nzyuzin.assignments.ai.dtrees
 
 import java.util.Scanner
 
+import com.github.nzyuzin.assignments.ai.dtrees.Creditability.Creditability
 import com.github.nzyuzin.assignments.ai.dtrees.Education.Education
 import com.github.nzyuzin.assignments.ai.dtrees.LevelOfTrust.LevelOfTrust
 
@@ -14,12 +15,30 @@ object Id3 {
     val file = "records.txt"
     val input = Source.fromFile(file)
     val inputScanner = new Scanner(input.bufferedReader())
-    val records = readRecords(inputScanner)
+    val records = readClassifiedRecords(inputScanner)
     records.foreach(r => println(r))
   }
 
-  def readClassifiedRecord(input: Scanner): Seq[Pair[Record, Int]] = {
-    null
+  def readClassifiedRecords(input: Scanner): Seq[Record] = {
+    val result = new mutable.MutableList[Record]
+    while (input.hasNext) {
+      val education: Education = getEducationFrom(input.next())
+
+      val age = input.nextInt()
+      if (age < 18 || age > 50) {
+        throw new RuntimeException("Incorrect age: " + age)
+      }
+      val married = input.nextBoolean()
+      val levelOfTrust = getLevelOfTrustFrom(input.nextInt())
+      val riskOfCancer = input.nextDouble()
+      if (riskOfCancer < 50 || riskOfCancer > 100) {
+        throw new RuntimeException("Incorrect risk of  cancer: " + riskOfCancer)
+      }
+
+      val creditability = getCreditabilityFrom(input.nextInt())
+      result += new Record(education, age, married, levelOfTrust, riskOfCancer, creditability)
+    }
+    result
   }
 
   def readRecords(input: Scanner): Seq[Record] = {
@@ -54,7 +73,7 @@ object Id3 {
     } else if (Education.Doctor.toString.toLowerCase.equals(educationString.toLowerCase)) {
       Education.Doctor
     } else {
-      null
+      throw new IllegalArgumentException
     }
   }
 
@@ -68,7 +87,21 @@ object Id3 {
     } else if (3.equals(levelOfTrustInt)) {
       LevelOfTrust.High
     } else {
-      null
+      throw new IllegalArgumentException
+    }
+  }
+
+  def getCreditabilityFrom(creditabilityLevel: Int): Creditability = {
+    if (0.equals(creditabilityLevel)) {
+      Creditability.None
+    } else if (1.equals(creditabilityLevel)) {
+      Creditability.Low
+    } else if (2.equals(creditabilityLevel)) {
+      Creditability.Average
+    } else if (3.equals(creditabilityLevel)) {
+      Creditability.High
+    } else {
+      throw new IllegalArgumentException
     }
   }
 
