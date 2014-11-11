@@ -4,7 +4,6 @@ import java.util.Scanner
 
 import com.github.nzyuzin.assignments.ai.dtrees.Creditability.Creditability
 import com.github.nzyuzin.assignments.ai.dtrees.Education.Education
-import com.github.nzyuzin.assignments.ai.dtrees.LevelOfTrust.LevelOfTrust
 
 import scala.collection.mutable
 import scala.io.Source
@@ -22,7 +21,7 @@ object Id3 {
   def entropy(records: Seq[Record]): Double = {
     val membersInClass = new mutable.HashMap[Creditability, Int]()
     records.foreach(record =>
-      membersInClass.put(record.creditability(), membersInClass.getOrElse(record.creditability(), 0) + 1))
+      membersInClass.put(record.creditability, membersInClass.getOrElse(record.creditability, 0) + 1))
     var result = 0.0
     membersInClass.values.foreach({ amount =>
       val ratio: Double = amount.toDouble / records.length.toDouble

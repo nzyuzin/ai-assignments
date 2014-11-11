@@ -10,15 +10,15 @@ class Record(edu: Education,
              trust: LevelOfTrust,
              cancer: Double,
              creditable: Creditability = null) {
-  def education() = edu
-  def age() = ag
-  def married() = marr
-  def levelOfTrust() = trust
-  def riskOfCancer() = cancer
-  def creditability() = creditable
+  def education = edu
+  def age = ag
+  def married = marr
+  def levelOfTrust = trust
+  def riskOfCancer = cancer
+  def creditability = creditable
 
   override def toString: String = {
-    "[%s %s %s %s %s %s]".format(education(), age(), married(), levelOfTrust(), riskOfCancer(), creditability())
+    "[%s %s %s %s %s %s]".format(education, age, married, levelOfTrust, riskOfCancer, creditability)
   }
 }
 

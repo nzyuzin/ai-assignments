@@ -110,11 +110,11 @@ object KMeans {
       var secondLen = 0
 
       parameters.foreach({ p =>
-        newFirst += p.first() / parameters.length
-        newSecond += p.second() / parameters.length
-        newThird += { if (p.third()) 1.0 / parameters.length else 0 }
-        firstLen = p.firstLength()
-        secondLen = p.secondLength()
+        newFirst += p.first / parameters.length
+        newSecond += p.second / parameters.length
+        newThird += { if (p.third) 1.0 / parameters.length else 0 }
+        firstLen = p.firstLength
+        secondLen = p.secondLength
       })
 
       new Parameter(newFirst, firstLen, newSecond, secondLen, newThird > 0.5)
@@ -140,14 +140,14 @@ object KMeans {
 
 class Parameter(f: Double, fL: Int, s: Double, sL: Int, t: Boolean) {
 
-  def first() = f
-  def firstLength() = fL
-  def second() = s
-  def secondLength() = sL
-  def third() = t
+  def first = f
+  def firstLength = fL
+  def second = s
+  def secondLength = sL
+  def third = t
 
   override def toString: String = {
-    "[%.2f %.2f %b]".format(first(), second(), third())
+    "[%.2f %.2f %b]".format(first, second, third)
   }
 
   def differenceFrom(another: Parameter): Double = {
