@@ -31,6 +31,22 @@ object Id3 {
     -result
   }
 
+  def getSubsetsByAttribute[T](attribute: Record => T, records: Seq[Record]): Map[T, Seq[Record]] = {
+    val result = new mutable.HashMap[T, mutable.MutableList[Record]]()
+    records.foreach({ record =>
+      result.getOrElse(attribute(record), new mutable.MutableList[Record]) += record
+    })
+    result.toMap
+  }
+
+  def infoGain[T](attribute: Record => T, records: Seq[Record]): Double = {
+    var sum = 0.0
+    getSubsetsByAttribute(attribute, records).values.foreach({ recordsSubset: Seq[Record] =>
+      sum += recordsSubset.length / records.length * entropy(recordsSubset)
+    })
+    entropy(records) - sum
+  }
+
   def readClassifiedRecords(input: Scanner): Seq[Record] = {
     val result = new mutable.MutableList[Record]
     while (input.hasNext) {
