@@ -1,11 +1,54 @@
 package com.github.nzyuzin.assignments.ai.kmeans
 
+import java.awt.{Graphics, Frame, Color, Canvas}
 import java.util.Scanner
 
 import scala.collection.mutable
 import scala.io.Source
 
 object KMeans {
+
+  def displayResult(clustersToParameters: Map[Parameter, Seq[Parameter]], windowTitle: String): Unit = {
+    val FRAME_SIZE = 800
+    val canvas = new Canvas() {
+
+      val colorsList = new mutable.MutableList[Color]
+      colorsList += Color.green
+      colorsList += Color.blue
+      colorsList += Color.red
+      colorsList += Color.cyan
+      colorsList += Color.yellow
+      colorsList += Color.magenta
+      colorsList += Color.orange
+      colorsList += Color.pink
+      colorsList += Color.darkGray
+      colorsList += Color.black
+      val colorsIterator = colorsList.iterator
+
+      override def paint(g: Graphics): Unit = {
+
+        clustersToParameters.foreach({ (pair: (Parameter, Seq[Parameter])) =>
+          val color = colorsIterator.next()
+          pair._2.foreach({ p =>
+            g.setColor(color)
+            g.drawOval(((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt, ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt, 3, 3);
+          })
+          val p = pair._1
+          g.drawRect(((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt, ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt, 5, 5)
+        })
+
+      }
+
+    }
+    canvas.setSize(FRAME_SIZE, FRAME_SIZE)
+    canvas.setBackground(Color.white)
+
+    val frame = new Frame()
+    frame.setSize(FRAME_SIZE, FRAME_SIZE)
+    frame.add(canvas)
+    frame.setTitle(windowTitle)
+    frame.setVisible(true)
+  }
 
   def readAmountOfClusters(input: Scanner): Int = {
     input.nextInt()
@@ -43,26 +86,25 @@ object KMeans {
     val clusters = initClusters(parameters, amountOfClusters)
     var clustersToParameters = cluster(parameters, clusters)
 
-    println("initial clustering: ", clustersToParameters, computeError(clustersToParameters))
-
     var iterations = 0
     var break = false
     while (!break) {
       val error = computeError(clustersToParameters)
       val newCentroids = chooseCentroids(clustersToParameters)
-      clustersToParameters = cluster(parameters, newCentroids)
-      val newError = computeError(clustersToParameters)
+      val newClustersToParameters = cluster(parameters, newCentroids)
+      val newError = computeError(newClustersToParameters)
       println(error, newError)
-      if (math.abs(newError - error) < (newError + error) / 2 * 0.01) {
+      if (newError > error || math.abs(newError - error) < (newError + error) / 2 * 0.05) {
         break = true
       }
+      clustersToParameters = newClustersToParameters
       iterations += 1
     }
 
     clustersToParameters.foreach((pair: (Parameter, Seq[Parameter])) =>
     println("elements in cluster " + pair._1 + " = " + pair._2.size))
     println("number of iterations = " + iterations)
-
+    displayResult(clustersToParameters, "Iteration " + iterations)
   }
 
   def initClusters(parameters: Seq[Parameter], amountOfClusters: Int): Map[Parameter, Seq[Parameter]] = {
@@ -151,10 +193,21 @@ class Parameter(f: Double, fL: Int, s: Double, sL: Int, t: Boolean) {
   }
 
   def differenceFrom(another: Parameter): Double = {
+    euclideanDistance(another)
+  }
+
+  def euclideanDistance(another: Parameter): Double = {
     val square = (x: Double) => x * x
     math.sqrt(square((this.first - another.first) / firstLength)
       + square((this.second - another.second) / secondLength)
       + (if (this.third == another.third) 1  else 0))
+  }
+
+  def manhattanDistance(another: Parameter): Double = {
+    val square = (x: Double) => x * x
+    (this.first - another.first).abs / firstLength
+      + (this.second - another.second).abs / secondLength
+      + (if (this.third == another.third) 1  else 0)
   }
 
 }
