@@ -12,29 +12,23 @@ object KMeans {
     val FRAME_SIZE = 800
     val canvas = new Canvas() {
 
-      val colorsList = new mutable.MutableList[Color]
-      colorsList += Color.green
-      colorsList += Color.blue
-      colorsList += Color.red
-      colorsList += Color.cyan
-      colorsList += Color.yellow
-      colorsList += Color.magenta
-      colorsList += Color.orange
-      colorsList += Color.pink
-      colorsList += Color.darkGray
-      colorsList += Color.black
-      val colorsIterator = colorsList.iterator
-
       override def paint(g: Graphics): Unit = {
 
         clustersToParameters.foreach({ (pair: (Parameter, Seq[Parameter])) =>
-          val color = colorsIterator.next()
+          val color = pair._1.color
           pair._2.foreach({ p =>
             g.setColor(color)
-            g.drawOval(((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt, ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt, 3, 3);
+            val x = ((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt
+            val y = ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt
+            g.setColor(Color.darkGray)
+            g.drawLine(0, FRAME_SIZE / 2, FRAME_SIZE, FRAME_SIZE / 2)
+            g.drawLine(FRAME_SIZE / 2, 0, FRAME_SIZE / 2, FRAME_SIZE)
+            g.setColor(color)
+            g.drawOval(x, y, 5, 5)
+            g.fillOval(x, y, 5, 5)
           })
           val p = pair._1
-          g.drawRect(((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt, ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt, 5, 5)
+          g.drawRect(((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt, ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt, 7, 7)
         })
 
       }
@@ -62,6 +56,20 @@ object KMeans {
     val lowerBoundSecond = input.nextInt()
     val upperBoundSecond = input.nextInt()
     val secondLen = upperBoundSecond - lowerBoundSecond
+
+    val colorsList = new mutable.MutableList[Color]
+    colorsList += Color.black
+    colorsList += Color.red
+    colorsList += Color.green
+    colorsList += Color.blue
+    colorsList += Color.magenta
+    colorsList += Color.cyan
+    colorsList += Color.orange
+    colorsList += Color.pink
+    colorsList += Color.yellow
+    colorsList += Color.darkGray
+    val colorsIterator = colorsList.iterator
+
     while (input.hasNext) {
       val first = input.nextDouble()
       if (first < lowerBoundFirst || first > upperBoundFirst) {
@@ -72,7 +80,7 @@ object KMeans {
         throw new RuntimeException("second parameter is out of bounds: " + second)
       }
       val third = input.nextBoolean()
-      result += new Parameter(first, firstLen, second, secondLen, third)
+      result += new Parameter(first, firstLen, second, secondLen, third, colorsIterator.next)
     }
     result
   }
@@ -89,6 +97,7 @@ object KMeans {
     var iterations = 0
     var break = false
     while (!break) {
+      displayResult(clustersToParameters, "Iteration " + iterations)
       val error = computeError(clustersToParameters)
       val newCentroids = chooseCentroids(clustersToParameters)
       val newClustersToParameters = cluster(parameters, newCentroids)
@@ -143,7 +152,9 @@ object KMeans {
 
   def chooseCentroids(clusterToParameter: Map[Parameter, Seq[Parameter]]): Map[Parameter, Seq[Parameter]] = {
     val result = new mutable.HashMap[Parameter, mutable.MutableList[Parameter]]
-    val chooseCentroid = { parameters: Seq[Parameter] =>
+    val chooseCentroid = { clustToParams: (Parameter, Seq[Parameter]) =>
+      val oldCentroid = clustToParams._1
+      val parameters: Seq[Parameter] = clustToParams._2
       var newFirst = 0.0
       var newSecond = 0.0
       var newThird = 0.0
@@ -159,10 +170,10 @@ object KMeans {
         secondLen = p.secondLength
       })
 
-      new Parameter(newFirst, firstLen, newSecond, secondLen, newThird > 0.5)
+      new Parameter(newFirst, firstLen, newSecond, secondLen, newThird > 0.5, oldCentroid.color)
     }
     clusterToParameter.foreach({ (clusterToParameters: (Parameter, Seq[Parameter])) =>
-       result.put(chooseCentroid(clusterToParameters._2), new mutable.MutableList[Parameter])
+       result.put(chooseCentroid(clusterToParameters), new mutable.MutableList[Parameter])
     })
 
     result.toMap
@@ -180,13 +191,15 @@ object KMeans {
 
 }
 
-class Parameter(f: Double, fL: Int, s: Double, sL: Int, t: Boolean) {
+class Parameter(f: Double, fL: Int, s: Double, sL: Int, t: Boolean, c: Color) {
 
   def first = f
   def firstLength = fL
   def second = s
   def secondLength = sL
   def third = t
+
+  def color = c
 
   override def toString: String = {
     "[%.2f %.2f %b]".format(first, second, third)
