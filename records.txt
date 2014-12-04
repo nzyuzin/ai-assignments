@@ -1,1 +1,9 @@
 Undergraduate 21 true 1 67 2
+Undergraduate 21 true 1 67 2
+Secondary 19 false 3 53 3
+Vocational 33 true 0 99 0
+Graduate 49 true 2 73 1
+Undergraduate 31 true 1 74 0
+Doctor 26 true 0 82 2
+Undergraduate 38 true 3 85 1
+Secondary 38 false 2 85 0

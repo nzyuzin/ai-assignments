@@ -15,7 +15,102 @@ object Id3 {
     val input = Source.fromFile(file)
     val inputScanner = new Scanner(input.bufferedReader())
     val records = readClassifiedRecords(inputScanner)
-    records.foreach(r => println(r))
+    val attributes = new mutable.HashMap[String, Record => Any]
+    attributes.put("Age", record => record.age)
+    attributes.put("Education", record => record.education)
+    attributes.put("Level of Trust", record => record.levelOfTrust)
+    attributes.put("Married", record => record.married)
+    attributes.put("Risk of Cancer", record => record.riskOfCancer)
+    val rootNode = buildTree(null, "RootNode", attributes.toMap, records)
+
+    printTree(rootNode, "")
+  }
+
+  def printTree(tree: Node, offset: String) {
+    print(offset)
+    println(tree.conditionDescription + ":")
+    if (tree.subNodes == null) {
+      println(offset + "\t" + tree.creditability)
+    } else {
+      tree.subNodes.foreach(node => printTree(node, offset + "\t"))
+    }
+  }
+
+  def buildTree(condition: Record => Boolean, conditionDescription: String,
+                attributes: Map[String, Record => Any], records: Seq[Record]): Node = {
+    if (allInSameClass(records)) {
+      if (records.isEmpty) {
+        return new Node(condition, conditionDescription, null, Creditability.None)
+      } else {
+        return new Node(condition, conditionDescription, null, records.head.creditability)
+      }
+    }
+    val bestAttr = getAttributeByGain(attributes, records)
+    val partition = getPartitionByAttribute(bestAttr._2, bestAttr._1, records)
+    val subNodes = new mutable.MutableList[Node]
+    partition.foreach({ conditionToRecords =>
+      val newNode = buildTree(conditionToRecords._1._1, conditionToRecords._1._2, attributes, conditionToRecords._2)
+      if (newNode != null) {
+        subNodes += newNode
+      }
+    })
+    new Node(condition, conditionDescription, subNodes.toList, null)
+  }
+
+  def getPartitionByAttribute(attr: Record => Any, attrDescription: String,
+                              records: Seq[Record]): Map[(Record => Boolean, String), Seq[Record]] = {
+    if (attr(records.head).isInstanceOf[Int] && records.length > 1) {
+      val orderedNumbers = getSubsetsByAttribute(attr, records).keys.toList.map(value => value.asInstanceOf[Int]).sorted(Ordering.Int)
+      var maxGain: Double = -1
+      var bestNumber = -1
+      var bestSplit: (Seq[Record], Seq[Record]) = null
+      orderedNumbers.take(orderedNumbers.length - 1).foreach({ number =>
+        val splitToInfoGain = getThresholdSplitInfoGain(records, attr, number)
+        val infoGain = splitToInfoGain._2
+        if (maxGain < infoGain) {
+          maxGain = infoGain
+          bestNumber = number
+          bestSplit = splitToInfoGain._1
+        }
+      })
+      val result = new mutable.HashMap[(Record => Boolean, String), Seq[Record]]()
+      result.put(({record => attr(record).asInstanceOf[Int] <= bestNumber }, attrDescription + " <= " + bestNumber), bestSplit._1)
+      result.put(({record => attr(record).asInstanceOf[Int] > bestNumber }, attrDescription + " > " + bestNumber), bestSplit._2)
+      result.toMap
+    } else {
+      getSubsetsByAttribute(attr, records).map(valueToSubset =>
+        (({ record: Record => attr(record) == valueToSubset._1 }, attrDescription + " = " + valueToSubset._1), valueToSubset._2))
+    }
+  }
+
+  def getThresholdSplitInfoGain(records: Seq[Record], attr: Record => Any, threshold: Int): ((Seq[Record], Seq[Record]), Double) = {
+    val lowerThanThreshold = records.filter(record => attr(record).asInstanceOf[Int] <= threshold)
+    val greaterThanThreshold = records.filter(record => attr(record).asInstanceOf[Int] > threshold)
+    ((lowerThanThreshold, greaterThanThreshold), entropy(records) -
+      (lowerThanThreshold.length.toDouble / records.length.toDouble * entropy(lowerThanThreshold) +
+        greaterThanThreshold.length.toDouble / records.length.toDouble * entropy(greaterThanThreshold)))
+  }
+
+  def allInSameClass(records: Seq[Record]): Boolean = {
+    if (records.isEmpty) {
+      return true
+    }
+    val headRecordClass = records.head.creditability
+    records.foreach(record => if (record.creditability != headRecordClass) return false)
+    true
+  }
+
+  def getAttributeByGain(attributes: Map[String, Record => Any], records: Seq[Record]): (String, Record => Any) = {
+    var maxGain: Double = -1
+    var bestAttribute: (String, Record => Any) = null
+    attributes.foreach(attr => {
+      val thisGain = infoGain(attr._2, records)
+      if (thisGain > maxGain) {
+        maxGain = thisGain
+        bestAttribute = attr
+      }
+    })
+    bestAttribute
   }
 
   def entropy(records: Seq[Record]): Double = {
@@ -33,7 +128,14 @@ object Id3 {
   def getSubsetsByAttribute[T](attribute: Record => T, records: Seq[Record]): Map[T, Seq[Record]] = {
     val result = new mutable.HashMap[T, mutable.MutableList[Record]]()
     records.foreach({ record =>
-      result.getOrElse(attribute(record), new mutable.MutableList[Record]) += record
+      val attrValue = attribute(record)
+      if (!result.contains(attrValue)) {
+        val newList = new mutable.MutableList[Record]
+        newList += record
+        result.put(attrValue, newList)
+      } else {
+        result.get(attribute(record)).get += record
+      }
     })
     result.toMap
   }
@@ -41,7 +143,7 @@ object Id3 {
   def infoGain[T](attribute: Record => T, records: Seq[Record]): Double = {
     var sum = 0.0
     getSubsetsByAttribute(attribute, records).values.foreach({ recordsSubset: Seq[Record] =>
-      sum += recordsSubset.length / records.length * entropy(recordsSubset)
+      sum += recordsSubset.length.toDouble / records.length.toDouble * entropy(recordsSubset)
     })
     entropy(records) - sum
   }
@@ -57,7 +159,7 @@ object Id3 {
       }
       val married = input.nextBoolean()
       val levelOfTrust = LevelOfTrust.getLevelOfTrustFrom(input.nextInt())
-      val riskOfCancer = input.nextDouble()
+      val riskOfCancer = input.nextInt()
       if (riskOfCancer < 50 || riskOfCancer > 100) {
         throw new RuntimeException("Incorrect risk of  cancer: " + riskOfCancer)
       }
@@ -79,7 +181,7 @@ object Id3 {
       }
       val married = input.nextBoolean()
       val levelOfTrust = LevelOfTrust.getLevelOfTrustFrom(input.nextInt())
-      val riskOfCancer = input.nextDouble()
+      val riskOfCancer = input.nextInt()
       if (riskOfCancer < 50 || riskOfCancer > 100) {
         throw new RuntimeException("Incorrect risk of  cancer: " + riskOfCancer)
       }
