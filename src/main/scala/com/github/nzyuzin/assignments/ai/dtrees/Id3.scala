@@ -28,7 +28,7 @@ object Id3 {
 
   def printTree(tree: Node, offset: String) {
     print(offset)
-    println(tree.conditionDescription + ":")
+    println(tree.conditionDescription + ":" + " -- " + tree.number)
     if (tree.subNodes == null) {
       println(offset + "\t" + tree.creditability)
     } else {
@@ -36,25 +36,29 @@ object Id3 {
     }
   }
 
+  var counter: Int = 0
+
   def buildTree(condition: Record => Boolean, conditionDescription: String,
                 attributes: Map[String, Record => Any], records: Seq[Record]): Node = {
     if (allInSameClass(records)) {
       if (records.isEmpty) {
-        return new Node(condition, conditionDescription, null, Creditability.None)
+        return new Node(condition, conditionDescription, null, Creditability.None, counter)
       } else {
-        return new Node(condition, conditionDescription, null, records.head.creditability)
+        return new Node(condition, conditionDescription, null, records.head.creditability, counter)
       }
     }
     val bestAttr = getAttributeByGain(attributes, records)
     val partition = getPartitionByAttribute(bestAttr._2, bestAttr._1, records)
     val subNodes = new mutable.MutableList[Node]
+    val count = counter
     partition.foreach({ conditionToRecords =>
+      counter += 1
       val newNode = buildTree(conditionToRecords._1._1, conditionToRecords._1._2, attributes, conditionToRecords._2)
       if (newNode != null) {
         subNodes += newNode
       }
     })
-    new Node(condition, conditionDescription, subNodes.toList, null)
+    new Node(condition, conditionDescription, subNodes.toList, null, count)
   }
 
   def getPartitionByAttribute(attr: Record => Any, attrDescription: String,
@@ -105,11 +109,13 @@ object Id3 {
     var bestAttribute: (String, Record => Any) = null
     attributes.foreach(attr => {
       val thisGain = infoGain(attr._2, records)
+      println("Partition by attribute " + attr._1 + " gain = " + thisGain)
       if (thisGain > maxGain) {
         maxGain = thisGain
         bestAttribute = attr
       }
     })
+    println("Best attribute by gain = " + bestAttribute._1 + " for Node " + counter)
     bestAttribute
   }
 

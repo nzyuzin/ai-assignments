@@ -10,6 +10,8 @@ object KMeans {
 
   def displayResult(clustersToParameters: Map[Parameter, Seq[Parameter]], windowTitle: String): Unit = {
     val FRAME_SIZE = 800
+    val POINT_SIZE = 10
+    val CENTROID_SIZE = 15
     val canvas = new Canvas() {
 
       override def paint(g: Graphics): Unit = {
@@ -18,27 +20,31 @@ object KMeans {
           val color = pair._1.color
           pair._2.foreach({ p =>
             g.setColor(color)
-            val x = ((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt
-            val y = ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt
+            val x = ((p.first + p.firstLength - 1) / p.firstLength * FRAME_SIZE).toInt
+            val y = FRAME_SIZE - ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt
             g.setColor(Color.darkGray)
-            g.drawLine(0, FRAME_SIZE / 2, FRAME_SIZE, FRAME_SIZE / 2)
-            g.drawLine(FRAME_SIZE / 2, 0, FRAME_SIZE / 2, FRAME_SIZE)
             g.setColor(color)
-            g.drawOval(x, y, 5, 5)
-            g.fillOval(x, y, 5, 5)
+            if (p.third) {
+              g.drawRect(x, y, POINT_SIZE, POINT_SIZE)
+              g.fillRect(x, y, POINT_SIZE, POINT_SIZE)
+            } else {
+              g.drawOval(x, y, POINT_SIZE, POINT_SIZE)
+              g.fillOval(x, y, POINT_SIZE, POINT_SIZE)
+            }
           })
           val p = pair._1
-          g.drawRect(((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt, ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt, 7, 7)
+          g.drawRect(((p.first + p.firstLength) / p.firstLength * FRAME_SIZE).toInt,
+            ((p.second.abs - p.secondLength) * FRAME_SIZE).toInt, CENTROID_SIZE, CENTROID_SIZE)
         })
 
       }
 
     }
-    canvas.setSize(FRAME_SIZE, FRAME_SIZE)
+    canvas.setSize(FRAME_SIZE + (FRAME_SIZE*0.05).toInt, FRAME_SIZE + (FRAME_SIZE*0.05).toInt)
     canvas.setBackground(Color.white)
 
     val frame = new Frame()
-    frame.setSize(FRAME_SIZE, FRAME_SIZE)
+    frame.setSize(FRAME_SIZE + (FRAME_SIZE*0.05).toInt, FRAME_SIZE + (FRAME_SIZE*0.05).toInt)
     frame.add(canvas)
     frame.setTitle(windowTitle)
     frame.setVisible(true)

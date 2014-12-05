@@ -1,0 +1,219 @@
+Partition by attribute Level of Trust gain = 0.2807784328950218
+Partition by attribute Age gain = 1.1399561043971569
+Partition by attribute Married gain = 0.02941028680564073
+Partition by attribute Risk of Cancer gain = 1.6301971162580773
+Partition by attribute Education gain = 0.40720500279447713
+Best attribute by gain = Risk of Cancer for Node 0
+Partition by attribute Level of Trust gain = 0.2156027672198988
+Partition by attribute Age gain = 1.2586515124912911
+Partition by attribute Married gain = 0.03582132885364819
+Partition by attribute Risk of Cancer gain = 1.5412879970335505
+Partition by attribute Education gain = 0.565956836482663
+Best attribute by gain = Risk of Cancer for Node 1
+Partition by attribute Level of Trust gain = 0.1354481792546176
+Partition by attribute Age gain = 1.3583329150900427
+Partition by attribute Married gain = 0.0508627345398045
+Partition by attribute Risk of Cancer gain = 1.5257381899960203
+Partition by attribute Education gain = 0.8162929156647822
+Best attribute by gain = Risk of Cancer for Node 2
+Partition by attribute Level of Trust gain = 0.37255624891826544
+Partition by attribute Age gain = 1.1697367178034823
+Partition by attribute Married gain = 0.2334585933443496
+Partition by attribute Risk of Cancer gain = 1.1697367178034823
+Partition by attribute Education gain = 0.6697367178034825
+Best attribute by gain = Age for Node 3
+Partition by attribute Level of Trust gain = 1.1219280948873624
+Partition by attribute Age gain = 0.5709505944546688
+Partition by attribute Married gain = 0.5709505944546687
+Partition by attribute Risk of Cancer gain = 1.1219280948873624
+Partition by attribute Education gain = 0.5709505944546688
+Best attribute by gain = Level of Trust for Node 4
+Partition by attribute Level of Trust gain = 0.0
+Partition by attribute Age gain = 1.0
+Partition by attribute Married gain = 1.0
+Partition by attribute Risk of Cancer gain = 1.0
+Partition by attribute Education gain = 1.0
+Best attribute by gain = Age for Node 6
+Partition by attribute Level of Trust gain = 0.3075193947230155
+Partition by attribute Age gain = 1.0588523498585067
+Partition by attribute Married gain = 0.19432734946514896
+Partition by attribute Risk of Cancer gain = 0.877034168040325
+Partition by attribute Education gain = 0.7397818949196944
+Best attribute by gain = Age for Node 10
+Partition by attribute Level of Trust gain = 0.5916727785823276
+Partition by attribute Age gain = 1.163101350010899
+Partition by attribute Married gain = 0.19811742113040354
+Partition by attribute Risk of Cancer gain = 1.163101350010899
+Partition by attribute Education gain = 0.7695459925589749
+Best attribute by gain = Age for Node 11
+Partition by attribute Level of Trust gain = 0.2516291673878229
+Partition by attribute Age gain = 0.2516291673878229
+Partition by attribute Married gain = 0.2516291673878229
+Partition by attribute Risk of Cancer gain = 0.9182958340544896
+Partition by attribute Education gain = 0.9182958340544896
+Best attribute by gain = Risk of Cancer for Node 12
+Partition by attribute Level of Trust gain = 1.0
+Partition by attribute Age gain = 1.0
+Partition by attribute Married gain = 0.0
+Partition by attribute Risk of Cancer gain = 1.0
+Partition by attribute Education gain = 1.0
+Best attribute by gain = Level of Trust for Node 13
+Partition by attribute Level of Trust gain = 0.8112781244591328
+Partition by attribute Age gain = 0.8112781244591328
+Partition by attribute Married gain = 0.31127812445913283
+Partition by attribute Risk of Cancer gain = 0.8112781244591328
+Partition by attribute Education gain = 0.31127812445913283
+Best attribute by gain = Level of Trust for Node 17
+Partition by attribute Level of Trust gain = 0.5374077582361889
+Partition by attribute Age gain = 1.3269971818123738
+Partition by attribute Married gain = 0.12013411808852847
+Partition by attribute Risk of Cancer gain = 1.364706796864148
+Partition by attribute Education gain = 0.9912642605354292
+Best attribute by gain = Risk of Cancer for Node 22
+Partition by attribute Level of Trust gain = 0.6213151687396952
+Partition by attribute Age gain = 1.1999086211579026
+Partition by attribute Married gain = 0.1444867598454651
+Partition by attribute Risk of Cancer gain = 1.2444745298554536
+Partition by attribute Education gain = 1.053577668936374
+Best attribute by gain = Risk of Cancer for Node 24
+Partition by attribute Level of Trust gain = 0.5849625007211561
+Partition by attribute Age gain = 1.2516291673878228
+Partition by attribute Married gain = 0.0
+Partition by attribute Risk of Cancer gain = 1.584962500721156
+Partition by attribute Education gain = 1.1258145836939113
+Best attribute by gain = Risk of Cancer for Node 25
+Partition by attribute Level of Trust gain = 0.5709505944546688
+Partition by attribute Age gain = 1.1219280948873624
+Partition by attribute Married gain = 0.0
+Partition by attribute Risk of Cancer gain = 1.5219280948873624
+Partition by attribute Education gain = 0.9709505944546687
+Best attribute by gain = Risk of Cancer for Node 26
+Partition by attribute Level of Trust gain = 0.31127812445913294
+Partition by attribute Age gain = 1.5
+Partition by attribute Married gain = 0.0
+Partition by attribute Risk of Cancer gain = 1.5
+Partition by attribute Education gain = 1.5
+Best attribute by gain = Age for Node 28
+Partition by attribute Level of Trust gain = 1.0
+Partition by attribute Age gain = 1.0
+Partition by attribute Married gain = 0.0
+Partition by attribute Risk of Cancer gain = 1.0
+Partition by attribute Education gain = 1.0
+Best attribute by gain = Level of Trust for Node 29
+Partition by attribute Level of Trust gain = 0.0
+Partition by attribute Age gain = 1.0
+Partition by attribute Married gain = 0.0
+Partition by attribute Risk of Cancer gain = 1.0
+Partition by attribute Education gain = 1.0
+Best attribute by gain = Age for Node 32
+Partition by attribute Level of Trust gain = 0.5709505944546688
+Partition by attribute Age gain = 0.9709505944546688
+Partition by attribute Married gain = 0.3219280948873625
+Partition by attribute Risk of Cancer gain = 0.41997309402197514
+Partition by attribute Education gain = 0.5709505944546688
+Best attribute by gain = Age for Node 36
+Partition by attribute Level of Trust gain = 1.3709505944546687
+Partition by attribute Age gain = 0.9709505944546687
+Partition by attribute Married gain = 0.41997309402197514
+Partition by attribute Risk of Cancer gain = 0.5709505944546687
+Partition by attribute Education gain = 0.819973094021975
+Best attribute by gain = Level of Trust for Node 39
+Partition by attribute Level of Trust gain = 0.9182958340544896
+Partition by attribute Age gain = 0.9182958340544896
+Partition by attribute Married gain = 0.2516291673878228
+Partition by attribute Risk of Cancer gain = 1.2516291673878228
+Partition by attribute Education gain = 0.5849625007211562
+Best attribute by gain = Risk of Cancer for Node 44
+Partition by attribute Level of Trust gain = 0.8112781244591328
+Partition by attribute Age gain = 0.8112781244591328
+Partition by attribute Married gain = 0.31127812445913283
+Partition by attribute Risk of Cancer gain = 0.8112781244591328
+Partition by attribute Education gain = 0.31127812445913283
+Best attribute by gain = Level of Trust for Node 45
+Partition by attribute Level of Trust gain = 1.0
+Partition by attribute Age gain = 1.0
+Partition by attribute Married gain = 0.0
+Partition by attribute Risk of Cancer gain = 1.0
+Partition by attribute Education gain = 1.0
+Best attribute by gain = Level of Trust for Node 49
+RootNode: -- 0
+  Risk of Cancer <= 94: -- 1
+    Risk of Cancer > 55: -- 2
+      Risk of Cancer > 70: -- 3
+        Age > 43: -- 4
+          Level of Trust = Average: -- 5
+            Low
+          Level of Trust = Low: -- 6
+            Age > 44: -- 7
+              Average
+            Age <= 44: -- 8
+              None
+          Level of Trust = None: -- 9
+            Average
+        Age <= 43: -- 10
+          Age > 23: -- 11
+            Age <= 26: -- 12
+              Risk of Cancer > 71: -- 13
+                Level of Trust = Average: -- 14
+                  High
+                Level of Trust = High: -- 15
+                  None
+              Risk of Cancer <= 71: -- 16
+                None
+            Age > 26: -- 17
+              Level of Trust = Average: -- 18
+                Average
+              Level of Trust = Low: -- 19
+                Average
+              Level of Trust = High: -- 20
+                None
+          Age <= 23: -- 21
+            Average
+      Risk of Cancer <= 70: -- 22
+        Risk of Cancer <= 56: -- 23
+          Average
+        Risk of Cancer > 56: -- 24
+          Risk of Cancer > 64: -- 25
+            Risk of Cancer > 65: -- 26
+              Risk of Cancer <= 66: -- 27
+                High
+              Risk of Cancer > 66: -- 28
+                Age > 22: -- 29
+                  Level of Trust = Low: -- 30
+                    Low
+                  Level of Trust = High: -- 31
+                    High
+                Age <= 22: -- 32
+                  Age <= 21: -- 33
+                    Low
+                  Age > 21: -- 34
+                    Average
+            Risk of Cancer <= 65: -- 35
+              Average
+          Risk of Cancer <= 64: -- 36
+            Age <= 25: -- 37
+              High
+            Age > 25: -- 38
+              Low
+    Risk of Cancer <= 55: -- 39
+      Level of Trust = Average: -- 40
+        High
+      Level of Trust = Low: -- 41
+        None
+      Level of Trust = High: -- 42
+        None
+      Level of Trust = None: -- 43
+        Low
+  Risk of Cancer > 94: -- 44
+    Risk of Cancer > 96: -- 45
+      Level of Trust = Average: -- 46
+        Low
+      Level of Trust = Low: -- 47
+        None
+      Level of Trust = High: -- 48
+        None
+    Risk of Cancer <= 96: -- 49
+      Level of Trust = Average: -- 50
+        High
+      Level of Trust = High: -- 51
+        None
