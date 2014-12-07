@@ -1,0 +1,14 @@
+cabbage pepper corn
+asparagus zucchini corn
+corn tomatoes beans zucchini
+pepper corn tomatoes beans
+beans asparagus cabbage
+zucchini asparagus beans tomatoes
+tomatoes corn
+cabbage tomatoes pepper
+zucchini asparagus beans
+beans corn
+pepper cabbage beans zucchini
+asparagus beans zucchini
+zucchini corn asparagus beans
+corn pepper tomatoes beans cabbage
