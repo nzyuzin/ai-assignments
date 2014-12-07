@@ -12,9 +12,43 @@ object Apriori {
     val data = readDataFromFile(fileName)
     val frequentSets = getFrequentSets(data, 4)
 
-    frequentSets.foreach(set =>
-      println("Subset of " + set + " = " + set.subsets.toList)
-    )
+    frequentSets.foreach({ set =>
+      val subsets = set.subsets.filter(subset => !subset.isEmpty && subset.size != set.size)
+      subsets.foreach({ subset =>
+        val disjoint = set -- subset
+        val supportValue = support(subset, disjoint, data)
+        val confidenceValue = confidence(subset, disjoint, data)
+        println(subset.toString + " -> " + disjoint + " support = " + supportValue + " confidence = " + confidenceValue)
+      })
+    })
+
+  }
+
+  def support(conditionSet: Set[String], implicationSet: Set[String], data: Seq[Set[String]]): Double = {
+    var numberOfMatches = 0
+
+    data.foreach({ transaction =>
+      if (conditionSet.intersect(transaction).size == conditionSet.size &&
+        implicationSet.intersect(transaction).size == implicationSet.size) {
+        numberOfMatches += 1
+      }
+    })
+    numberOfMatches.toDouble / data.size.toDouble
+  }
+
+  def confidence(conditionSet: Set[String], implicationSet: Set[String], data: Seq[Set[String]]): Double = {
+    var numberOfMatchesBoth = 0
+    var numberOfMatchesCondition = 0
+
+    data.foreach({ transaction =>
+      if (conditionSet.intersect(transaction).size == conditionSet.size) {
+        numberOfMatchesCondition += 1
+        if (implicationSet.intersect(transaction).size == implicationSet.size) {
+          numberOfMatchesBoth += 1
+        }
+      }
+    })
+    numberOfMatchesBoth.toDouble / numberOfMatchesCondition.toDouble
   }
 
   def getFrequentSets(data: Seq[Set[String]], threshold: Int): Seq[Set[String]] = {
