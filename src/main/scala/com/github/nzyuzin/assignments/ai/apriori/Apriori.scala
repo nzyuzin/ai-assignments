@@ -13,7 +13,7 @@ object Apriori {
     val frequentSets = getFrequentSets(data, 4)
 
     frequentSets.foreach({ set =>
-      val subsets = set.subsets.filter(subset => !subset.isEmpty && subset.size != set.size)
+      val subsets = set.subsets.filter(subset => subset.nonEmpty && subset.size != set.size)
       subsets.foreach({ subset =>
         val disjoint = set -- subset
         val supportValue = support(subset, disjoint, data)
