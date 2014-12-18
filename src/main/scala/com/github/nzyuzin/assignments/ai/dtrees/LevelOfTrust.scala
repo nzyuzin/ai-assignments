@@ -16,7 +16,7 @@ object LevelOfTrust extends Enumeration {
     } else if (3.equals(levelOfTrustInt)) {
       LevelOfTrust.High
     } else {
-      throw new IllegalArgumentException
+      null
     }
   }
 

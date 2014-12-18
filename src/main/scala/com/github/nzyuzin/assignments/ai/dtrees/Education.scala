@@ -17,7 +17,7 @@ object Education extends Enumeration {
     } else if (Education.Doctor.toString.toLowerCase.equals(educationString.toLowerCase)) {
       Education.Doctor
     } else {
-      throw new IllegalArgumentException
+      null
     }
   }
 
